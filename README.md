@@ -1,3 +1,5 @@
 # Plotly
-Multiple Small Plotly Files
-Piece of Shit RStudio
+Multiple Small Plotly Files\
+\
+basic.R is a simply scatterplot
+
