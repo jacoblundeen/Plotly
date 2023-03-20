@@ -1,5 +1,6 @@
 # Plotly
 Multiple Small Plotly Files\
 \
-basic.R is a simply scatterplot
+basic.R is a simple scatterplot\
+scatter3d.R is a 3D scatterplot
 
