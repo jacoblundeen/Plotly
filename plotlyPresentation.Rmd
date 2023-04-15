@@ -1,0 +1,96 @@
+---
+title: "A SF 49ers Quarterback Comparison"
+subtitle: "Hit your arrow key to continue."
+author: "Jacob M. Lundeen"
+date: "2023-04-15"
+output: ioslides_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(plotly)
+library(dplyr)
+library(nflfastR)
+library(tidyverse)
+```
+
+```{r, cache=TRUE}
+pbp <- load_pbp(2022)
+```
+
+```{r, warning=FALSE, message=FALSE}
+sf_qbs <- pbp %>%
+  filter(!is.na(cpoe) & !is.na(epa), pass == 1, posteam == "SF") %>%
+  group_by(passer, game_id) %>%
+  summarize(
+    week = last(week),
+    epa = mean(qb_epa),
+    cpoe = mean(cpoe, na.rm = T),
+    n_dropbacks = sum(pass)
+  ) %>%
+  filter(passer == "B.Purdy" | passer == "J.Garoppolo") %>%
+  filter(n_dropbacks > 10)
+```
+
+```{r, warning=FALSE, message=FALSE}
+all_QBs <- pbp %>%
+  filter(!is.na(cpoe) & !is.na(epa), pass == 1) %>%
+  group_by(passer) %>%
+  summarize(
+    epa = mean(qb_epa),
+    cpoe = mean(cpoe, na.rm = T),
+    n_dropbacks = sum(pass)
+  ) %>%
+  filter(n_dropbacks > 200)
+
+all_EPA <- mean(all_QBs$epa)
+all_CPOE <- mean(all_QBs$cpoe)
+
+```
+
+## Introduction
+
+This short presentation is to simply provide a high level comparison between the SF 49ers QBs Brock Purdy and Jimmy Garoppollo from the 2022 season. This comparison doesn't include Trey Lance due to his small sample size, and any game with less than ten attempts is not included for the two QBs.
+
+Users can scroll over the individual data points on the chargs to see the actual values. For the average lines, scroll over the beginning or end points.
+
+## Purdy versus Garoppollo - EPA by Week
+
+```{r, warning=FALSE, message=FALSE}
+purdyEPA <- mean(sf_qbs[sf_qbs$passer == "B.Purdy",]$epa)
+garEPA <- mean(subset(sf_qbs, passer = "J.Garoppolo")$epa)
+fig <- plot_ly(sf_qbs, x = ~week, y = ~epa, color = ~passer, type = 'scatter',
+        mode = "lines", symbol = ~passer, title = "Purdy vs Garoppolo EPA") %>%
+  layout(title="Purdy vs Garoppollo EPA", xaxis = list(title = "Game Week", nticks = 20), 
+         yaxis = list(title = "EPA")) %>%
+  add_lines(x=c(2,12), y=garEPA, line = list(dash = "dash", color = "red"),
+            inherit = FALSE, name = "Garoppolo Average") %>%
+  add_lines(x=c(13,20), y = purdyEPA, line = list(dash = "dash", color = "orange"),
+            inherit = FALSE, name = "Purdy Average") %>%
+  add_lines(x = c(0,20), y = all_EPA, line = list(dash = "dash", color = "black"),
+            inherit = FALSE, name = "League Average")
+
+
+fig
+```
+
+## Purdy versus Garoppoloo - CPOE by Week
+
+```{r, warning=FALSE, message=FALSE}
+purdyCPOE <- mean(sf_qbs[sf_qbs$passer == "B.Purdy",]$cpoe)
+garCPOE <- mean(subset(sf_qbs, passer = "J.Garoppolo")$cpoe)
+fig <- plot_ly(sf_qbs, x = ~week, y = ~cpoe, color = ~passer, type = 'scatter',
+        mode = "lines", symbol = ~passer, title = "Purdy vs Garoppolo CPOE") %>%
+  layout(title="Purdy vs Garoppollo CPOE", xaxis = list(title = "Game Week", nticks = 20), 
+         yaxis = list(title = "CPOE")) %>%
+  add_lines(x=c(2,12), y=garCPOE, line = list(dash = "dash", color = "red"),
+            inherit = FALSE, name = "Garoppolo Average") %>%
+  add_lines(x=c(13,20), y = purdyCPOE, line = list(dash = "dash", color = "orange"),
+            inherit = FALSE, name = "Purdy Average") %>%
+  add_lines(x = c(0,20), y = all_CPOE, line = list(dash = "dash", color = "black"),
+            inherit = FALSE, name = "League Average")
+
+
+fig
+
+```
