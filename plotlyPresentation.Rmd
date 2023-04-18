@@ -52,7 +52,7 @@ all_CPOE <- mean(all_QBs$cpoe)
 
 This short presentation is to simply provide a high level comparison between the SF 49ers QBs Brock Purdy and Jimmy Garoppollo from the 2022 season. This comparison doesn't include Trey Lance due to his small sample size, and any game with less than ten attempts is not included for the two QBs.
 
-Users can scroll over the individual data points on the chargs to see the actual values. For the average lines, scroll over the beginning or end points.
+Users can scroll over the individual data points on the charts to see the actual values. For the average lines, scroll over the beginning or end points.
 
 ## Purdy versus Garoppollo - EPA by Week
 

@@ -1,0 +1,11 @@
+name: Publish Document
+title:
+username:
+account: rpubs
+server: rpubs.com
+hostUrl: rpubs.com
+appId: https://api.rpubs.com/api/v1/document/1029104/597f6f8214264f97afccb650e116e7cb
+bundleId: https://api.rpubs.com/api/v1/document/1029104/597f6f8214264f97afccb650e116e7cb
+url: http://rpubs.com/jacoblundeen/1029104
+when: 1681582934.60783
+lastSyncTime: 1681582934.60784
